@@ -89,8 +89,8 @@ export function Market() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
           <select
             value={selectedStock}
             onChange={(e) => fetchKLine(e.target.value)}
@@ -103,7 +103,7 @@ export function Market() {
             ))}
           </select>
           
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             {['1m', '5m', '15m', '30m', '60m', 'daily', 'weekly', 'monthly'].map((period) => (
               <button
                 key={period}
@@ -122,7 +122,7 @@ export function Market() {
         </button>
       </div>
 
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {currentQuote ? (
           <>
             <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
@@ -180,7 +180,7 @@ export function Market() {
       </div>
 
       {currentQuote && (
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
             <span className="text-gray-400 text-sm">开盘价</span>
             <div className="text-lg font-bold mt-2 text-white">{currentQuote.open.toFixed(2)}</div>

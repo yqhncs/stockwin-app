@@ -21,7 +21,7 @@ export function AISelect() {
 
   return (
     <div className="space-y-6">
-      <div className="bg-gradient-to-r from-stock-primary to-stock-secondary rounded-xl p-8">
+      <div className="bg-gradient-to-r from-stock-primary to-stock-secondary rounded-xl p-6">
         <div className="flex items-center gap-4 mb-6">
           <div className="p-3 bg-white/10 rounded-xl">
             <Bot className="w-8 h-8 text-white" />
@@ -81,7 +81,7 @@ export function AISelect() {
             <span className="text-gray-400 text-sm">共 {aiResults.length} 只股票</span>
           </div>
           <div className="p-4">
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {aiResults.map((result, index) => (
                 <div key={index} className="bg-gray-800/50 rounded-xl p-6 hover:bg-gray-800 transition-colors">
                   <div className="flex items-start justify-between">
@@ -124,7 +124,7 @@ export function AISelect() {
           <h3 className="text-white font-semibold">热点追踪</h3>
         </div>
         <div className="p-4">
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {hotspots.map((hotspot, index) => (
               <div key={index} className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-5 border border-gray-700">
                 <div className="flex items-center gap-2 mb-3">
@@ -145,7 +145,7 @@ export function AISelect() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <div className="bg-gray-900 rounded-xl border border-gray-800 p-6">
           <h3 className="text-white font-semibold mb-4">AI选股原理</h3>
           <div className="space-y-3 text-gray-400 text-sm">
