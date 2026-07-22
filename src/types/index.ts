@@ -51,6 +51,47 @@ export interface AISelectResult {
   name: string;
   reason: string;
   score: number;
+  signal?: 'buy' | 'sell' | 'hold';
+  factors?: {
+    value: number;
+    growth: number;
+    momentum: number;
+    quality: number;
+    volatility: number;
+  };
+  strategy?: string;
+}
+
+export interface StockFactorData {
+  code: string;
+  name: string;
+  price: number;
+  pe: number;
+  pb: number;
+  roe: number;
+  revenueGrowth: number;
+  profitGrowth: number;
+  momentum20d: number;
+  momentum60d: number;
+  volatility20d: number;
+  turnoverRate: number;
+  volume: number;
+  marketCap: number;
+}
+
+export interface BacktestMetrics {
+  totalReturn: number;
+  annualReturn: number;
+  maxDrawdown: number;
+  sharpeRatio: number;
+  sortinoRatio: number;
+  calmarRatio: number;
+  winRate: number;
+  profitFactor: number;
+  totalTrades: number;
+  avgHoldDays: number;
+  benchmarkReturn: number;
+  alpha: number;
 }
 
 export interface InvestmentReport {
