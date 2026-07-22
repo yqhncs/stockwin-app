@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { TrendingUp, TrendingDown, Activity, Clock, Sparkles, ChevronRight } from 'lucide-react';
+import { TrendingUp, TrendingDown, Activity, Clock, Sparkles, ChevronRight, DollarSign, Users, BarChart2 } from 'lucide-react';
 import { useStockStore } from '@/stores/stockStore';
 
 export function Dashboard() {
@@ -20,11 +20,14 @@ export function Dashboard() {
     downCount: 1568,
     flatCount: 287,
     turnover: 8560,
+    volume: 1.25,
+    northFlow: 85.6,
+    marketValue: 85.6,
   };
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
         <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
           <div className="flex items-center justify-between">
             <span className="text-gray-400 text-sm">上证指数</span>
@@ -33,7 +36,7 @@ export function Dashboard() {
           <div className="mt-4 flex items-baseline gap-2">
             <span className="text-2xl font-bold text-white">{marketOverview.index.toFixed(2)}</span>
             <span className={`text-sm font-medium ${marketOverview.change >= 0 ? 'text-stock-up' : 'text-stock-down'}`}>
-              {marketOverview.change >= 0 ? '+' : ''}{marketOverview.change.toFixed(2)} ({marketOverview.changePercent.toFixed(2)}%)
+              {marketOverview.change >= 0 ? '+' : ''}{marketOverview.changePercent.toFixed(2)}%
             </span>
           </div>
         </div>
@@ -65,6 +68,27 @@ export function Dashboard() {
           </div>
           <div className="mt-4">
             <span className="text-2xl font-bold text-white">{marketOverview.turnover}</span>
+          </div>
+        </div>
+
+        <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
+          <div className="flex items-center justify-between">
+            <span className="text-gray-400 text-sm">北向资金</span>
+            <Users className="w-5 h-5 text-green-500" />
+          </div>
+          <div className="mt-4 flex items-baseline gap-2">
+            <span className="text-2xl font-bold text-green-500">+{marketOverview.northFlow}</span>
+            <span className="text-gray-400 text-sm">亿</span>
+          </div>
+        </div>
+
+        <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
+          <div className="flex items-center justify-between">
+            <span className="text-gray-400 text-sm">量比</span>
+            <BarChart2 className="w-5 h-5 text-stock-secondary" />
+          </div>
+          <div className="mt-4">
+            <span className="text-2xl font-bold text-white">{marketOverview.volume}</span>
           </div>
         </div>
       </div>

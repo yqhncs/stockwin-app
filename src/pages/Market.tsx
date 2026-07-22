@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { init } from 'klinecharts';
 import type { Chart, DataLoaderGetBarsParams } from 'klinecharts';
 import { useStockStore } from '@/stores/stockStore';
-import { Plus, TrendingUp, TrendingDown } from 'lucide-react';
+import { Plus, TrendingUp, TrendingDown, Info } from 'lucide-react';
+import { StockDetail } from '@/components/StockDetail/StockDetail';
 
 export function Market() {
   const chartRef = useRef<HTMLDivElement>(null);
@@ -179,26 +180,15 @@ export function Market() {
         </div>
       </div>
 
-      {currentQuote && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
-            <span className="text-gray-400 text-sm">开盘价</span>
-            <div className="text-lg font-bold mt-2 text-white">{currentQuote.open.toFixed(2)}</div>
-          </div>
-          <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
-            <span className="text-gray-400 text-sm">最高价</span>
-            <div className="text-lg font-bold mt-2 text-stock-up">{currentQuote.high.toFixed(2)}</div>
-          </div>
-          <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
-            <span className="text-gray-400 text-sm">最低价</span>
-            <div className="text-lg font-bold mt-2 text-stock-down">{currentQuote.low.toFixed(2)}</div>
-          </div>
-          <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
-            <span className="text-gray-400 text-sm">振幅</span>
-            <div className="text-lg font-bold mt-2 text-white">{((currentQuote.high - currentQuote.low) / currentQuote.open * 100).toFixed(2)}%</div>
-          </div>
+      <div className="bg-gray-900 rounded-xl border border-gray-800">
+        <div className="p-4 border-b border-gray-800 flex items-center gap-2">
+          <Info className="w-5 h-5 text-stock-secondary" />
+          <h3 className="text-white font-semibold">股票详情</h3>
         </div>
-      )}
+        <div className="p-4">
+          <StockDetail code={selectedStock} />
+        </div>
+      </div>
     </div>
   );
 }
