@@ -24,7 +24,7 @@ export function Dashboard() {
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
           <div className="flex items-center justify-between">
             <span className="text-gray-400 text-sm">上证指数</span>
@@ -69,8 +69,8 @@ export function Dashboard() {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-6">
-        <div className="col-span-2 bg-gray-900 rounded-xl border border-gray-800">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="col-span-1 lg:col-span-2 bg-gray-900 rounded-xl border border-gray-800">
           <div className="p-4 border-b border-gray-800 flex items-center justify-between">
             <h3 className="text-white font-semibold">自选股</h3>
             <button className="text-stock-secondary text-sm hover:text-white transition-colors">
@@ -143,7 +143,7 @@ export function Dashboard() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <div className="bg-gray-900 rounded-xl border border-gray-800">
           <div className="p-4 border-b border-gray-800">
             <h3 className="text-white font-semibold">板块涨幅榜</h3>
