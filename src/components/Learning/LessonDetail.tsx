@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { ArrowLeft, ChevronLeft, ChevronRight, CheckCircle2, Circle, BookMarked, FileText, StickyNote, Trophy, RefreshCcw, Share2 } from 'lucide-react';
+import { ArrowLeft, ChevronLeft, ChevronRight, CheckCircle2, Circle, BookMarked, StickyNote, Trophy, RefreshCcw, FileText } from 'lucide-react';
 import { getLessonByDay, getPhaseByDay, lessons } from '@/data/courseData';
 import { useLearningStore } from '@/stores/learningStore';
 
@@ -70,73 +70,37 @@ export function LessonDetail({ day, onBack, onDayChange }: LessonDetailProps) {
   const quizScore = quizScores[day];
 
   const tabs = [
-    { id: 'content', label: '课程内容', icon: BookMarked },
-    { id: 'notes', label: '学习笔记', icon: StickyNote },
-    { id: 'quiz', label: '课后测验', icon: Trophy },
-  ] as const;
+    { id: 'content' as const, label: '课件', icon: BookMarked },
+    { id: 'notes' as const, label: '笔记', icon: StickyNote },
+    { id: 'quiz' as const, label: '测验', icon: Trophy },
+  ];
 
   return (
     <div className="h-full flex flex-col">
-      {/* Header */}
-      <div className="flex-shrink-0 bg-gray-900 rounded-xl border border-gray-800 p-4 mb-4">
-        <div className="flex items-center gap-4">
-          <button
-            onClick={onBack}
-            className="flex-shrink-0 p-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white transition-colors"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </button>
+      {/* Compact Toolbar - single row */}
+      <div className="flex-shrink-0 flex items-center gap-2 px-3 py-2 bg-gray-900 rounded-t-xl border border-gray-800 border-b-0">
+        <button
+          onClick={onBack}
+          className="flex-shrink-0 p-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white transition-colors"
+          title="返回课程列表"
+        >
+          <ArrowLeft className="w-4 h-4" />
+        </button>
 
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-3">
-              <div
-                className="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center text-white font-bold text-sm bg-gradient-to-br"
-                style={{ background: `linear-gradient(135deg, ${phase.color}, ${phase.color}cc)` }}
-              >
-                {day}
-              </div>
-              <div className="min-w-0">
-                <h2 className="text-white font-semibold truncate">{lesson.title}</h2>
-                <div className="flex items-center gap-3 mt-0.5">
-                  <span className="text-xs text-gray-500">第{phase.phase}阶段 · {phase.name}</span>
-                  <span className="text-xs" style={{ color: phase.color }}>第{weekOfPhase(day)}周</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <button
-            onClick={() => isCompleted ? markDayIncomplete(day) : markDayComplete(day)}
-            className={`flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
-              isCompleted
-                ? 'bg-green-500/20 text-green-400 border border-green-500/30 hover:bg-green-500/30'
-                : 'bg-gray-800 text-gray-400 border border-gray-700 hover:bg-gray-700 hover:text-white'
-            }`}
-          >
-            {isCompleted ? <CheckCircle2 className="w-4 h-4" /> : <Circle className="w-4 h-4" />}
-            <span className="hidden sm:inline">{isCompleted ? '已完成' : '标记完成'}</span>
-          </button>
-
-          <div className="flex-shrink-0 flex items-center gap-1">
-            <button
-              onClick={goPrev}
-              disabled={!hasPrev}
-              className="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-            <button
-              onClick={goNext}
-              disabled={!hasNext}
-              className="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
-            >
-              <ChevronRight className="w-5 h-5" />
-            </button>
-          </div>
+        <div
+          className="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-xs"
+          style={{ background: `linear-gradient(135deg, ${phase.color}, ${phase.color}cc)` }}
+        >
+          {day}
         </div>
 
-        {/* Tabs */}
-        <div className="flex gap-1 mt-4 p-1 bg-gray-800/50 rounded-lg">
+        <div className="flex-1 min-w-0">
+          <h2 className="text-white text-sm font-semibold truncate">{lesson.title}</h2>
+          <p className="text-gray-500 text-xs truncate">第{phase.phase}阶段 · {phase.name} · 第{weekOfPhase(day)}周</p>
+        </div>
+
+        {/* Tab buttons */}
+        <div className="flex-shrink-0 flex items-center gap-1 bg-gray-800/50 rounded-lg p-0.5">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -144,29 +108,63 @@ export function LessonDetail({ day, onBack, onDayChange }: LessonDetailProps) {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors ${
                   isActive
                     ? 'bg-gray-700 text-white'
-                    : 'text-gray-400 hover:text-white hover:bg-gray-800'
+                    : 'text-gray-400 hover:text-white'
                 }`}
+                title={tab.label}
               >
-                <Icon className="w-4 h-4" />
-                <span className="hidden sm:inline">{tab.label}</span>
+                <Icon className="w-3.5 h-3.5" />
+                <span className="hidden md:inline">{tab.label}</span>
               </button>
             );
           })}
         </div>
+
+        <button
+          onClick={() => isCompleted ? markDayIncomplete(day) : markDayComplete(day)}
+          className={`flex-shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg font-medium text-xs transition-all ${
+            isCompleted
+              ? 'bg-green-500/20 text-green-400 border border-green-500/30'
+              : 'bg-gray-800 text-gray-400 border border-gray-700 hover:text-white'
+          }`}
+          title={isCompleted ? '已完成' : '标记完成'}
+        >
+          {isCompleted ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Circle className="w-3.5 h-3.5" />}
+          <span className="hidden lg:inline">{isCompleted ? '已完成' : '完成'}</span>
+        </button>
+
+        <div className="flex-shrink-0 flex items-center gap-1">
+          <button
+            onClick={goPrev}
+            disabled={!hasPrev}
+            className="p-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+            title="上一天"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </button>
+          <span className="text-xs text-gray-500 px-1">{day}/270</span>
+          <button
+            onClick={goNext}
+            disabled={!hasNext}
+            className="p-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+            title="下一天"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </button>
+        </div>
       </div>
 
-      {/* Content Area */}
-      <div className="flex-1 min-h-0 bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
+      {/* Content Area - takes all remaining space */}
+      <div className="flex-1 min-h-0 bg-white rounded-b-xl border border-gray-800 border-t-0 overflow-hidden">
         {activeTab === 'content' && (
           <div className="h-full relative">
             {!iframeLoaded && (
               <div className="absolute inset-0 flex items-center justify-center bg-gray-900 z-10">
                 <div className="flex flex-col items-center text-gray-500">
                   <RefreshCcw className="w-8 h-8 animate-spin mb-3" />
-                  <span className="text-sm">加载中...</span>
+                  <span className="text-sm">加载课件中...</span>
                 </div>
               </div>
             )}
@@ -181,24 +179,20 @@ export function LessonDetail({ day, onBack, onDayChange }: LessonDetailProps) {
         )}
 
         {activeTab === 'notes' && (
-          <div className="h-full p-6 overflow-y-auto">
+          <div className="h-full p-5 overflow-y-auto bg-gray-900">
             <div className="max-w-3xl mx-auto">
-              <div className="flex items-center gap-2 mb-4">
+              <div className="flex items-center gap-2 mb-3">
                 <StickyNote className="w-5 h-5 text-amber-400" />
-                <h3 className="text-white font-semibold">学习笔记</h3>
+                <h3 className="text-white font-semibold">学习笔记 - 第{day}天</h3>
                 <span className="text-xs text-gray-500 ml-auto">自动保存</span>
               </div>
               <textarea
                 value={note}
                 onChange={(e) => handleNoteChange(e.target.value)}
-                placeholder="在这里记录你的学习心得、重点知识、疑问点...
-&#10;&#10;提示：
-• 用自己的话总结知识点
-• 记录实战案例和感悟
-• 标记不懂的地方后续复习"
-                className="w-full h-[calc(100vh-400px)] min-h-[400px] bg-gray-800/50 border border-gray-700 rounded-xl p-4 text-gray-200 placeholder-gray-600 resize-none focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/30 font-mono text-sm leading-relaxed"
+                placeholder={`记录第${day}天的学习心得、重点知识、疑问点...\n\n提示：\n• 用自己的话总结知识点\n• 记录实战案例和感悟\n• 标记不懂的地方后续复习`}
+                className="w-full h-[calc(100%-60px)] min-h-[300px] bg-gray-800/50 border border-gray-700 rounded-xl p-4 text-gray-200 placeholder-gray-600 resize-none focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/30 font-mono text-sm leading-relaxed"
               />
-              <div className="mt-3 flex items-center justify-between text-xs text-gray-500">
+              <div className="mt-2 flex items-center justify-between text-xs text-gray-500">
                 <span>{note.length} 字</span>
                 <span>笔记保存在本地浏览器</span>
               </div>
@@ -207,11 +201,11 @@ export function LessonDetail({ day, onBack, onDayChange }: LessonDetailProps) {
         )}
 
         {activeTab === 'quiz' && (
-          <div className="h-full p-6 overflow-y-auto">
+          <div className="h-full p-5 overflow-y-auto bg-gray-900">
             <div className="max-w-3xl mx-auto">
               <div className="flex items-center gap-2 mb-6">
                 <Trophy className="w-5 h-5 text-amber-400" />
-                <h3 className="text-white font-semibold">课后测验</h3>
+                <h3 className="text-white font-semibold">课后测验 - 第{day}天</h3>
               </div>
 
               {quizScore ? (
@@ -241,48 +235,13 @@ export function LessonDetail({ day, onBack, onDayChange }: LessonDetailProps) {
                     onClick={() => setActiveTab('content')}
                     className="mt-6 px-6 py-2.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors"
                   >
-                    返回课程内容
+                    返回课件
                   </button>
                 </div>
               )}
             </div>
           </div>
         )}
-      </div>
-
-      {/* Bottom Navigation */}
-      <div className="flex-shrink-0 flex items-center justify-between mt-4">
-        <button
-          onClick={goPrev}
-          disabled={!hasPrev}
-          className="flex items-center gap-2 px-4 py-2.5 bg-gray-900 border border-gray-800 rounded-xl text-gray-400 hover:text-white hover:border-gray-700 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
-        >
-          <ChevronLeft className="w-5 h-5" />
-          <div className="text-left hidden sm:block">
-            <div className="text-xs text-gray-500">上一天</div>
-            <div className="text-sm font-medium truncate max-w-[200px]">
-              {hasPrev ? getLessonByDay(day - 1)?.title : ''}
-            </div>
-          </div>
-        </button>
-
-        <div className="text-center text-gray-500 text-sm">
-          第 <span className="text-white font-medium">{day}</span> / 270 天
-        </div>
-
-        <button
-          onClick={goNext}
-          disabled={!hasNext}
-          className="flex items-center gap-2 px-4 py-2.5 bg-gray-900 border border-gray-800 rounded-xl text-gray-400 hover:text-white hover:border-gray-700 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
-        >
-          <div className="text-right hidden sm:block">
-            <div className="text-xs text-gray-500">下一天</div>
-            <div className="text-sm font-medium truncate max-w-[200px]">
-              {hasNext ? getLessonByDay(day + 1)?.title : ''}
-            </div>
-          </div>
-          <ChevronRight className="w-5 h-5" />
-        </button>
       </div>
     </div>
   );

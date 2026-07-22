@@ -21,7 +21,7 @@ export function Learning() {
   };
 
   return (
-    <div className="h-[calc(100vh-140px)] min-h-[600px]">
+    <div className="h-[calc(100vh-110px)] min-h-[500px]">
       {view === 'home' ? (
         <LearningHome onSelectDay={handleSelectDay} />
       ) : (
