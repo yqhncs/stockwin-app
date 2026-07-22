@@ -1,21 +1,27 @@
-import { Bell, Search, User } from 'lucide-react';
+import { Bell, Search, User, Menu } from 'lucide-react';
 
 interface HeaderProps {
   title: string;
   subtitle?: string;
+  onMenuClick: () => void;
 }
 
-export function Header({ title, subtitle }: HeaderProps) {
+export function Header({ title, subtitle, onMenuClick }: HeaderProps) {
   return (
-    <header className="bg-gray-900 border-b border-gray-800 px-6 py-4">
+    <header className="bg-gray-900 border-b border-gray-800 px-4 lg:px-6 py-4">
       <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-xl font-bold text-white">{title}</h2>
-          {subtitle && <p className="text-gray-400 text-sm mt-1">{subtitle}</p>}
+        <div className="flex items-center gap-4">
+          <button onClick={onMenuClick} className="lg:hidden p-2 text-gray-400 hover:text-white">
+            <Menu className="w-6 h-6" />
+          </button>
+          <div>
+            <h2 className="text-xl font-bold text-white">{title}</h2>
+            {subtitle && <p className="text-gray-400 text-sm mt-1">{subtitle}</p>}
+          </div>
         </div>
         
         <div className="flex items-center gap-4">
-          <div className="relative">
+          <div className="relative hidden sm:block">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
             <input
               type="text"
@@ -31,7 +37,7 @@ export function Header({ title, subtitle }: HeaderProps) {
           
           <button className="flex items-center gap-2 px-4 py-2 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors">
             <User className="w-5 h-5 text-gray-400" />
-            <span className="text-white text-sm">用户</span>
+            <span className="text-white text-sm hidden sm:block">用户</span>
           </button>
         </div>
       </div>
