@@ -2,8 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import { init } from 'klinecharts';
 import type { Chart, DataLoaderGetBarsParams } from 'klinecharts';
 import { useStockStore } from '@/stores/stockStore';
-import { Plus, TrendingUp, TrendingDown, Info } from 'lucide-react';
+import { Plus, TrendingUp, TrendingDown, Info, ArrowLeft } from 'lucide-react';
 import { StockDetail } from '@/components/StockDetail/StockDetail';
+import { StockSearch } from '@/components/Search/Search';
 
 export function Market() {
   const chartRef = useRef<HTMLDivElement>(null);
@@ -88,39 +89,49 @@ export function Market() {
     { code: '300750', name: '宁德时代' },
   ];
 
+  const handleSelectStock = (code: string, name: string) => {
+    fetchKLine(code);
+    fetchQuotes([code]);
+  };
+
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-          <select
-            value={selectedStock}
-            onChange={(e) => fetchKLine(e.target.value)}
-            className="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-stock-secondary"
-          >
-            {stockList.map((stock) => (
-              <option key={stock.code} value={stock.code}>
-                {stock.name} ({stock.code})
-              </option>
-            ))}
-          </select>
+      <div className="bg-gradient-to-r from-stock-primary/20 to-stock-secondary/20 rounded-xl p-6 border border-gray-800">
+        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <StockSearch onSelectStock={handleSelectStock} />
+            <select
+              value={selectedStock}
+              onChange={(e) => fetchKLine(e.target.value)}
+              className="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-stock-secondary hidden sm:block"
+            >
+              {stockList.map((stock) => (
+                <option key={stock.code} value={stock.code}>
+                  {stock.name} ({stock.code})
+                </option>
+              ))}
+            </select>
+          </div>
           
-          <div className="flex flex-wrap gap-2">
-            {['1m', '5m', '15m', '30m', '60m', 'daily', 'weekly', 'monthly'].map((period) => (
-              <button
-                key={period}
-                onClick={() => fetchKLine(selectedStock, period)}
-                className="px-3 py-1 bg-gray-800 text-gray-400 rounded hover:bg-gray-700 hover:text-white transition-colors text-sm"
-              >
-                {period}
-              </button>
-            ))}
+          <div className="flex items-center gap-3">
+            <div className="flex flex-wrap gap-2">
+              {['1m', '5m', '15m', '30m', '60m', 'daily', 'weekly', 'monthly'].map((period) => (
+                <button
+                  key={period}
+                  onClick={() => fetchKLine(selectedStock, period)}
+                  className="px-3 py-1 bg-gray-800 text-gray-400 rounded hover:bg-gray-700 hover:text-white transition-colors text-sm"
+                >
+                  {period}
+                </button>
+              ))}
+            </div>
+            
+            <button className="flex items-center gap-2 px-4 py-2 bg-stock-secondary text-white rounded-lg hover:bg-stock-secondary/80 transition-colors">
+              <Plus className="w-4 h-4" />
+              添加自选
+            </button>
           </div>
         </div>
-
-        <button className="flex items-center gap-2 px-4 py-2 bg-stock-secondary text-white rounded-lg hover:bg-stock-secondary/80 transition-colors">
-          <Plus className="w-4 h-4" />
-          添加自选
-        </button>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

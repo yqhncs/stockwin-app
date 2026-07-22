@@ -1,4 +1,5 @@
-import { Bell, Search, User, Menu } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Bell, Search, User, Menu, Clock, Settings, HelpCircle } from 'lucide-react';
 
 interface HeaderProps {
   title: string;
@@ -7,6 +8,23 @@ interface HeaderProps {
 }
 
 export function Header({ title, subtitle, onMenuClick }: HeaderProps) {
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const formatTime = (date: Date) => {
+    return date.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  };
+
+  const formatDate = (date: Date) => {
+    return date.toLocaleDateString('zh-CN', { month: 'long', day: 'numeric', weekday: 'short' });
+  };
+
   return (
     <header className="bg-gray-900 border-b border-gray-800 px-4 lg:px-6 py-4">
       <div className="flex items-center justify-between">
@@ -21,6 +39,12 @@ export function Header({ title, subtitle, onMenuClick }: HeaderProps) {
         </div>
         
         <div className="flex items-center gap-4">
+          <div className="hidden lg:flex items-center gap-2 px-3 py-2 bg-gray-800 rounded-lg text-gray-400 text-sm">
+            <Clock className="w-4 h-4" />
+            <span>{formatDate(currentTime)}</span>
+            <span className="text-stock-secondary font-medium">{formatTime(currentTime)}</span>
+          </div>
+          
           <div className="relative hidden sm:block">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
             <input
@@ -35,8 +59,18 @@ export function Header({ title, subtitle, onMenuClick }: HeaderProps) {
             <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
           </button>
           
+          <button className="p-2 text-gray-400 hover:text-white transition-colors">
+            <HelpCircle className="w-5 h-5" />
+          </button>
+          
+          <button className="p-2 text-gray-400 hover:text-white transition-colors">
+            <Settings className="w-5 h-5" />
+          </button>
+          
           <button className="flex items-center gap-2 px-4 py-2 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors">
-            <User className="w-5 h-5 text-gray-400" />
+            <div className="w-8 h-8 rounded-full bg-stock-secondary flex items-center justify-center">
+              <User className="w-4 h-4 text-white" />
+            </div>
             <span className="text-white text-sm hidden sm:block">用户</span>
           </button>
         </div>
