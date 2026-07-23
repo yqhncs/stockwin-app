@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { ArrowLeft, ChevronLeft, ChevronRight, CheckCircle2, Circle, BookMarked, StickyNote, Trophy, RefreshCcw, FileText } from 'lucide-react';
 import { getLessonByDay, getPhaseByDay, lessons } from '@/data/courseData';
 import { useLearningStore } from '@/stores/learningStore';
+import { QuizPanel } from './QuizPanel';
 
 interface LessonDetailProps {
   day: number;
@@ -24,7 +25,6 @@ export function LessonDetail({ day, onBack, onDayChange }: LessonDetailProps) {
     setCurrentDay,
     studyNotes,
     setStudyNote,
-    quizScores,
   } = useLearningStore();
 
   const isCompleted = completedDays.includes(day);
@@ -66,8 +66,6 @@ export function LessonDetail({ day, onBack, onDayChange }: LessonDetailProps) {
       </div>
     );
   }
-
-  const quizScore = quizScores[day];
 
   const tabs = [
     { id: 'content' as const, label: '课件', icon: BookMarked },
@@ -201,46 +199,7 @@ export function LessonDetail({ day, onBack, onDayChange }: LessonDetailProps) {
         )}
 
         {activeTab === 'quiz' && (
-          <div className="h-full p-5 overflow-y-auto bg-gray-900">
-            <div className="max-w-3xl mx-auto">
-              <div className="flex items-center gap-2 mb-6">
-                <Trophy className="w-5 h-5 text-amber-400" />
-                <h3 className="text-white font-semibold">课后测验 - 第{day}天</h3>
-              </div>
-
-              {quizScore ? (
-                <div className="bg-green-500/10 border border-green-500/30 rounded-xl p-6 text-center">
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-500/20 flex items-center justify-center">
-                    <Trophy className="w-8 h-8 text-green-400" />
-                  </div>
-                  <h4 className="text-xl font-bold text-white mb-2">测验完成！</h4>
-                  <p className="text-3xl font-bold text-green-400 mb-4">
-                    {quizScore.score} / {quizScore.total}
-                  </p>
-                  <p className="text-gray-400 text-sm">
-                    正确率 {Math.round((quizScore.score / quizScore.total) * 100)}%
-                  </p>
-                </div>
-              ) : (
-                <div className="text-center py-12">
-                  <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gray-800 flex items-center justify-center">
-                    <Trophy className="w-10 h-10 text-gray-600" />
-                  </div>
-                  <h4 className="text-white font-semibold mb-2">测验功能开发中</h4>
-                  <p className="text-gray-500 text-sm max-w-md mx-auto">
-                    课后测验功能正在开发中。您可以在课程页面中找到每日的复习测试题，
-                    完成后手动记录成绩。
-                  </p>
-                  <button
-                    onClick={() => setActiveTab('content')}
-                    className="mt-6 px-6 py-2.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors"
-                  >
-                    返回课件
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
+          <QuizPanel day={day} />
         )}
       </div>
     </div>
